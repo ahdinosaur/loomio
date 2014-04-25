@@ -2,7 +2,7 @@
   %td= render 'base/linked_avatar', user: request.requestor
   %td
     =link_to request.name, user_path(request.requestor)
-    #{request.email}
+    =request.email
 -else
   %td= render 'base/avatar', user: LoggedOutUser.new(request.name, request.email)
   %td
