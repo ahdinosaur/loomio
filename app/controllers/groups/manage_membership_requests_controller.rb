@@ -5,9 +5,8 @@ class Groups::ManageMembershipRequestsController < GroupBaseController
   def index
     @group = GroupDecorator.new Group.find(params[:group_id])
     if can? :manage_membership_requests, @group
-      @current_requests = @group.membership_requests.where('response IS ?', nil)
-      @previous_requests = @group.membership_requests.where('response IS NOT ?', nil).
-                                  order('responded_at DESC').page(params[:page]).per(7)
+      @current_requests  = @group.membership_requests.pending
+      @previous_requests = @group.membership_requests.responded_to.page(params[:page]).per(7)
 
       render 'index'
     else

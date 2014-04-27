@@ -4,7 +4,7 @@
     =link_to request.name, user_path(request.requestor)
     =request.email
 -else
-  %td= render 'base/avatar', user: LoggedOutUser.new(request.name, request.email)
+  %td= render 'base/avatar', user: LoggedOutUser.new(name: request.name, email: request.email)
   %td
     #{request.name} |
     #{request.email}
