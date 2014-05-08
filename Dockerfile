@@ -1,10 +1,17 @@
 FROM ahdinosaur/debian-ruby
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev imagemagick libmagickwand-dev
-RUN mkdir /loomio
-WORKDIR /loomio
-ADD Gemfile /loomio/Gemfile
-RUN /bin/bash -l -c "bundle install"
-ADD . /loomio
-RUN /bin/bash -l -c "bundle exec rake db:create"
-RUN /bin/bash -l -c "bundle exec rake db:schema:load"
-RUN /bin/bash -l -c "bundle exec rake db:seed"
+
+RUN echo "deb http://http.debian.net/debian wheezy-backports main" >> /etc/apt/sources.list.d/backports.list
+
+RUN apt-get update
+#RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential git libpq-dev imagemagick libmagickwand-dev
+
+WORKDIR /tmp
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
+RUN bundle install --deployment --full-index --jobs $(nproc)
+
+ADD . /opt/loomio
+WORKDIR /opt/loomio
+
+CMD bundle exec foreman start
