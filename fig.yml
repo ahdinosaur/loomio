@@ -7,6 +7,6 @@ web:
   volumes:
     - .:/loomio
   ports:
-    - "5000:5000"
+    - "3000:3000"
   links:
     - db
